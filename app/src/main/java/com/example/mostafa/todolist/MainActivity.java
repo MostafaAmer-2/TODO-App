@@ -1,6 +1,6 @@
 package com.example.mostafa.todolist;
 
-import android.os.Bundle;
+        import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -60,7 +60,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         items.remove(position);
         adapter.notifyDataSetChanged();
         FileHelper.writeData(items, this);
-        Toast.makeText(this, "Delete", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Item Deleted", Toast.LENGTH_SHORT).show();
 
     }
 }
+
+

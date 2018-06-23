@@ -1,20 +1,19 @@
 package com.example.mostafa.todolist;
 
-        import android.content.Intent;
-        import android.os.Bundle;
-        import android.support.annotation.NonNull;
-        import android.support.v7.app.AppCompatActivity;
-        import android.text.TextUtils;
-        import android.view.View;
-        import android.widget.Button;
-        import android.widget.EditText;
-        import android.widget.Toast;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
-        import com.google.android.gms.tasks.OnCompleteListener;
-        import com.google.android.gms.tasks.Task;
-        import com.google.firebase.auth.AuthResult;
-        import com.google.firebase.auth.FirebaseAuth;
-        import com.google.firebase.auth.FirebaseUser;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 
 public class login_page extends AppCompatActivity {
@@ -23,6 +22,7 @@ public class login_page extends AppCompatActivity {
     private EditText mPasswordField;
 
     private Button mLoginBtn;
+    private Button mRegisterBtn;
 
     private FirebaseAuth mAuth;
 
@@ -39,6 +39,7 @@ public class login_page extends AppCompatActivity {
         mPasswordField= (EditText) findViewById(R.id.passwordField);
 
         mLoginBtn= (Button) findViewById(R.id.loginBtn);
+        mRegisterBtn= (Button) findViewById(R.id.registerBtn);
 
         mAuthListener=new FirebaseAuth.AuthStateListener() {
             @Override
@@ -56,16 +57,24 @@ public class login_page extends AppCompatActivity {
                 startSignIn();
             }
         });
+        mRegisterBtn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View view) {
+                goToRegistrationPage();
+            }
+        });
+
     }
 
     protected void onStart(){
         super.onStart();
 
         FirebaseAuth.getInstance().signOut(); //test kda
+        mEmailField.setText("");
+        mPasswordField.setText("");
 
         mAuth.addAuthStateListener(mAuthListener);
-
-        FirebaseUser currentUser = mAuth.getCurrentUser();
     }
 
     public void onStop(){
@@ -94,6 +103,10 @@ public class login_page extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void goToRegistrationPage(){
+        startActivity(new Intent(login_page.this, register_page.class));
     }
 
 }

@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "998267301337",
+    "firebase_url": "https://todo-app-sasa.firebaseio.com",
+    "project_id": "todo-app-sasa",
+    "storage_bucket": "todo-app-sasa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998267301337:android:b52fcc1984365ac2",
+        "android_client_info": {
+          "package_name": "com.example.mostafa.todolist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "998267301337-m2ro77ii6un2hq57cuiu0d230qp0cp3i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mostafa.todolist",
+            "certificate_hash": "c41fe2d58a04758e76bc8de1279a3e0478d42939"
+          }
+        },
+        {
+          "client_id": "998267301337-4avqph5mk1qsu0g5rltjd1g0i2p4rbql.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "998267301337-4avqph5mk1qsu0g5rltjd1g0i2p4rbql.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg7UaeD14hm3hJcEGeUtv_XCfjs4MG1wU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "998267301337-4avqph5mk1qsu0g5rltjd1g0i2p4rbql.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

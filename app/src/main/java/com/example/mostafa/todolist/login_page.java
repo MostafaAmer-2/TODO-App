@@ -20,12 +20,10 @@ public class login_page extends AppCompatActivity {
 
     private EditText mEmailField;
     private EditText mPasswordField;
-
     private Button mLoginBtn;
     private Button mRegisterBtn;
 
     private FirebaseAuth mAuth;
-
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
@@ -37,7 +35,6 @@ public class login_page extends AppCompatActivity {
 
         mEmailField= (EditText) findViewById(R.id.emailField);
         mPasswordField= (EditText) findViewById(R.id.passwordField);
-
         mLoginBtn= (Button) findViewById(R.id.loginBtn);
         mRegisterBtn= (Button) findViewById(R.id.registerBtn);
 
@@ -70,7 +67,6 @@ public class login_page extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
-        FirebaseAuth.getInstance().signOut(); //test kda
         mEmailField.setText("");
         mPasswordField.setText("");
 

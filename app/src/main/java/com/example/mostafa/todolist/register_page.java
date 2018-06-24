@@ -46,7 +46,6 @@ public class register_page extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
-      //  FirebaseAuth.getInstance().signOut(); //test kda
         mEmailField.setText("");
         mPasswordField.setText("");
     }

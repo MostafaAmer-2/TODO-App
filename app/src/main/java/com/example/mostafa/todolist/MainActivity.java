@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +29,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<String> items=new ArrayList<String>();
     private ArrayAdapter<String> adapter;
 
-    private DatabaseReference dref;
+    private DatabaseReference dref= FirebaseDatabase.getInstance().getReference();;
+
+
+    DatabaseReference usersRef = dref.child("users");
+    DatabaseReference IDref = usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
 
@@ -40,18 +45,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         itemET = findViewById(R.id.item_edit_text);
         add_btn = findViewById(R.id.add_btn);
         logout_btn=findViewById(R.id.logout_btn);
-        itemsList = findViewById(R.id.items_list);
-        dref= FirebaseDatabase.getInstance().getReference();
-
-        DatabaseReference usersRef = dref.child("users");
-        DatabaseReference IDref = usersRef.child("youssef");
+        itemsList= findViewById(R.id.items_list);
 
         //...here....//
 
         IDref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                items.add(dataSnapshot.getValue(String.class));
+                items.add(dataSnapshot.getKey());
                 adapter.notifyDataSetChanged();
             }
 
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                items.remove(dataSnapshot.getValue(String.class));
+                items.remove(dataSnapshot.getKey());
                 adapter.notifyDataSetChanged();
             }
 
@@ -75,9 +76,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
 
-      //  items = FileHelper.readData(this);
+        });
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         itemsList.setAdapter(adapter);
@@ -93,13 +93,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch(v.getId()){
             case R.id.add_btn:
                 String itemEntered = itemET.getText().toString();
-                adapter.add(itemEntered);
                 itemET.setText("");
-             //   FileHelper.writeData(items, this);
+                IDref.child(itemEntered).setValue("");
                 Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
                 break;
 
             case R.id.logout_btn:
+                FirebaseAuth.getInstance().signOut();
                 finish();
                 break;
         }
@@ -108,9 +108,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        items.remove(position);
+        String removedItem=items.get(position);
         adapter.notifyDataSetChanged();
-        FileHelper.writeData(items, this);
+        IDref.child(removedItem).removeValue();
         Toast.makeText(this, "Item Deleted", Toast.LENGTH_SHORT).show();
     }
 }

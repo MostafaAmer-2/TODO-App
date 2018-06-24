@@ -20,12 +20,10 @@ public class login_page extends AppCompatActivity {
 
     private EditText mEmailField;
     private EditText mPasswordField;
-
     private Button mLoginBtn;
     private Button mRegisterBtn;
 
     private FirebaseAuth mAuth;
-
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     @Override
@@ -37,19 +35,17 @@ public class login_page extends AppCompatActivity {
 
         mEmailField= (EditText) findViewById(R.id.emailField);
         mPasswordField= (EditText) findViewById(R.id.passwordField);
-
         mLoginBtn= (Button) findViewById(R.id.loginBtn);
         mRegisterBtn= (Button) findViewById(R.id.registerBtn);
-
         mAuthListener=new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){
+                    Toast.makeText(login_page.this, FirebaseAuth.getInstance().getCurrentUser().getUid(), Toast.LENGTH_LONG).show();
                     startActivity(new Intent(login_page.this, MainActivity.class));
                 }
             }
         };
-
         mLoginBtn.setOnClickListener(new View.OnClickListener(){
 
             @Override
@@ -70,7 +66,7 @@ public class login_page extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
 
-        FirebaseAuth.getInstance().signOut(); //test kda
+       // FirebaseAuth.getInstance().signOut(); //test kda
         mEmailField.setText("");
         mPasswordField.setText("");
 

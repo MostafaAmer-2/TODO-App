@@ -18,8 +18,6 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private EditText itemET;
@@ -27,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button logout_btn;
     private ListView itemsList;
 
-    private ArrayList<String> items;
+    private ArrayList<String> items=new ArrayList<String>();
     private ArrayAdapter<String> adapter;
 
     private DatabaseReference dref;
@@ -44,7 +42,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         logout_btn=findViewById(R.id.logout_btn);
         itemsList = findViewById(R.id.items_list);
         dref= FirebaseDatabase.getInstance().getReference();
-        dref.addChildEventListener(new ChildEventListener() {
+
+        DatabaseReference usersRef = dref.child("users");
+        DatabaseReference IDref = usersRef.child("youssef");
+
+        //...here....//
+
+        IDref.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 items.add(dataSnapshot.getValue(String.class));
@@ -73,14 +77,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        items = FileHelper.readData(this);
+      //  items = FileHelper.readData(this);
 
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
         itemsList.setAdapter(adapter);
 
         add_btn.setOnClickListener(this);
         logout_btn.setOnClickListener(this);
-
         itemsList.setOnItemClickListener(this);
 
     }
@@ -92,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 String itemEntered = itemET.getText().toString();
                 adapter.add(itemEntered);
                 itemET.setText("");
-                FileHelper.writeData(items, this);
+             //   FileHelper.writeData(items, this);
                 Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
                 break;
 
@@ -109,7 +112,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adapter.notifyDataSetChanged();
         FileHelper.writeData(items, this);
         Toast.makeText(this, "Item Deleted", Toast.LENGTH_SHORT).show();
-
     }
 }
 

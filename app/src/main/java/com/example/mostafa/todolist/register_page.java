@@ -18,25 +18,20 @@ public class register_page extends AppCompatActivity {
 
     private EditText mEmailField;
     private EditText mPasswordField;
-
     private Button mRegisterBtn;
 
     private FirebaseAuth mAuth;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_page);
 
-        mAuth=FirebaseAuth.getInstance();
-
         mEmailField= (EditText) findViewById(R.id.emailField);
         mPasswordField= (EditText) findViewById(R.id.passwordField);
-
         mRegisterBtn= (Button) findViewById(R.id.registerBtn);
 
+        mAuth=FirebaseAuth.getInstance();
 
         mRegisterBtn.setOnClickListener(new View.OnClickListener(){
 
@@ -54,8 +49,6 @@ public class register_page extends AppCompatActivity {
       //  FirebaseAuth.getInstance().signOut(); //test kda
         mEmailField.setText("");
         mPasswordField.setText("");
-
-
     }
 
     private void startRegistration(){

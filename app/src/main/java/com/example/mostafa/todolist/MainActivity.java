@@ -19,6 +19,9 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
+/**
+ * This class is responsible for showing and editing the TODO list
+ */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     private EditText itemET;
@@ -29,14 +32,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<String> items=new ArrayList<String>();
     private ArrayAdapter<String> adapter;
 
-    private DatabaseReference dref= FirebaseDatabase.getInstance().getReference();;
+    private DatabaseReference dref= FirebaseDatabase.getInstance().getReference(); //root node
 
 
-    DatabaseReference usersRef = dref.child("users");
-    DatabaseReference IDref = usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+    DatabaseReference usersRef = dref.child("users"); //child from the root node: users
+    DatabaseReference IDref = usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()); //child from the users node: depending on the id of the user
 
 
-
+    /**
+     * The onCreate method instantiates all the instance variables with their corresponding values,
+     * setting the action listeners for the buttons, and setting the child event listener to update the list
+     * whenever an item is added or removed from the database upon creation of the activity.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,9 +55,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         logout_btn=findViewById(R.id.logout_btn);
         itemsList= findViewById(R.id.items_list);
 
-        //...here....//
-
         IDref.addChildEventListener(new ChildEventListener() {
+            /**
+             * add the new item present in the database to the ArrayList
+             * @param dataSnapshot
+             * @param s
+             */
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 items.add(dataSnapshot.getKey());
@@ -61,6 +72,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             }
 
+            /**
+             * remove the item that was deleted from the database, from the ArrayList
+             * @param dataSnapshot
+             */
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 items.remove(dataSnapshot.getKey());
@@ -88,17 +103,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    /**
+     * specifying the action taken upon clicking different buttons. Switch statement to control the different behaviours
+     * @param v The view which holds the buttons
+     */
     @Override
     public void onClick(View v) {
         switch(v.getId()){
-            case R.id.add_btn:
+            case R.id.add_btn: //adds the item to the database and empties the EditText field
                 String itemEntered = itemET.getText().toString();
                 itemET.setText("");
                 IDref.child(itemEntered).setValue("");
                 Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
                 break;
 
-            case R.id.logout_btn:
+            case R.id.logout_btn: //logs out the user and finished the activity
                 FirebaseAuth.getInstance().signOut();
                 finish();
                 break;
@@ -106,11 +125,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+    /**
+     * the purpose of this method is to remove an item from the list and from the database upon clicking uon it.
+     * @param parent
+     * @param view
+     * @param position
+     * @param id
+     */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String removedItem=items.get(position);
+        String removedItem=items.get(position); //get the position of the item the user wishes to remove
         adapter.notifyDataSetChanged();
-        IDref.child(removedItem).removeValue();
+        IDref.child(removedItem).removeValue(); //remove value from database
         Toast.makeText(this, "Item Deleted", Toast.LENGTH_SHORT).show();
     }
 }

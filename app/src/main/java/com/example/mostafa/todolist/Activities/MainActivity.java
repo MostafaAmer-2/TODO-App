@@ -1,4 +1,4 @@
-package com.example.mostafa.todolist;
+package com.example.mostafa.todolist.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +10,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.mostafa.todolist.Interfaces.MainPresenter;
+import com.example.mostafa.todolist.Interfaces.MainView;
+import com.example.mostafa.todolist.Models.TODOitem;
+import com.example.mostafa.todolist.Presenters.MainActivityPresenter;
+import com.example.mostafa.todolist.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,21 +27,23 @@ import java.util.ArrayList;
 /**
  * This class is responsible for showing and editing the TODO list
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, MainView {
 
     private EditText itemET;
     private Button add_btn;
     private Button logout_btn;
     private ListView itemsList;
 
-    private ArrayList<String> items=new ArrayList<String>();
-    private ArrayAdapter<String> adapter;
+
 
     private DatabaseReference dref= FirebaseDatabase.getInstance().getReference(); //root node
 
 
-    DatabaseReference usersRef = dref.child("users"); //child from the root node: users
-    DatabaseReference IDref = usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()); //child from the users node: depending on the id of the user
+    private MainPresenter mainPresenter;
+  //  private M
+
+    private DatabaseReference usersRef = dref.child("users"); //child from the root node: users
+    private DatabaseReference IDref = usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()); //child from the users node: depending on the id of the user
 
 
     /**
@@ -55,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         logout_btn=findViewById(R.id.logout_btn);
         itemsList= findViewById(R.id.items_list);
 
+        mainPresenter=new MainActivityPresenter(this, getApplicationContext());
+
         IDref.addChildEventListener(new ChildEventListener() {
             /**
              * add the new item present in the database to the ArrayList
@@ -63,8 +72,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              */
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                items.add(dataSnapshot.getKey());
-                adapter.notifyDataSetChanged();
+                ((MainActivityPresenter)mainPresenter).getItems().add(new TODOitem(dataSnapshot.getKey()));
+                ((MainActivityPresenter)mainPresenter).notifyAdapter();
             }
 
             @Override
@@ -78,8 +87,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              */
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                items.remove(dataSnapshot.getKey());
-                adapter.notifyDataSetChanged();
+                for(TODOitem item: ((MainActivityPresenter)mainPresenter).getItems()){
+                    if (item.title.equals((dataSnapshot.getKey())))
+                        ((MainActivityPresenter)mainPresenter).getItems().remove(dataSnapshot.getKey());
+                }
+                ((MainActivityPresenter)mainPresenter).notifyAdapter();
             }
 
             @Override
@@ -94,9 +106,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         });
 
-        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
-        itemsList.setAdapter(adapter);
-
+        itemsList.setAdapter(((MainActivityPresenter)mainPresenter).getAdapter());
+        getApplicationContext();
         add_btn.setOnClickListener(this);
         logout_btn.setOnClickListener(this);
         itemsList.setOnItemClickListener(this);
@@ -111,10 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.add_btn: //adds the item to the database and empties the EditText field
-                String itemEntered = itemET.getText().toString();
-                itemET.setText("");
-                IDref.child(itemEntered).setValue("");
-                Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
+                mainPresenter.onAddBtnClicked();
+                displayItemAdded();
                 break;
 
             case R.id.logout_btn: //logs out the user and finished the activity
@@ -124,6 +133,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void displayItemAdded(){
+        Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
+    }
+    public void displayItemDeleted(){
+        Toast.makeText(this, "Item Deleted", Toast.LENGTH_SHORT).show();
+    }
 
     /**
      * the purpose of this method is to remove an item from the list and from the database upon clicking uon it.
@@ -134,11 +149,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        String removedItem=items.get(position); //get the position of the item the user wishes to remove
-        adapter.notifyDataSetChanged();
-        IDref.child(removedItem).removeValue(); //remove value from database
-        Toast.makeText(this, "Item Deleted", Toast.LENGTH_SHORT).show();
+        mainPresenter.onItemClicked(position);
+        displayItemDeleted();
     }
+
+    public String getItemET(){
+        return itemET.getText().toString();
+    }
+
+    public void setItemET(String text){
+        itemET.setText(text);
+    }
+
+    public DatabaseReference getIDref() {
+        return IDref;
+    }
+
+
 }
 
 

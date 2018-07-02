@@ -37,8 +37,9 @@ public class MainActivityPresenter implements MainPresenter {
     @Override
     public void onItemClicked(int position) {
         TODOitem removedItem=items.get(position); //get the position of the item the user wishes to remove
-        notifyAdapter();
         ((MainActivity)mainView).getIDref().child(removedItem.title).removeValue(); //remove value from database
+        items.remove(position);
+        notifyAdapter();
 
     }
 

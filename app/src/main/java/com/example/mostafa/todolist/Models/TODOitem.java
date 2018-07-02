@@ -6,4 +6,8 @@ public class TODOitem {
     public TODOitem (String name){
         title= name;
     }
+
+    public String toString(){
+        return this.title;
+    }
 }

@@ -2,6 +2,7 @@ package com.example.mostafa.todolist.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private DatabaseReference dref= FirebaseDatabase.getInstance().getReference(); //root node
-
+    //TODO: move to Interaction
 
     private MainPresenter mainPresenter;
   //  private M
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainPresenter=new MainActivityPresenter(this, getApplicationContext());
 
-        IDref.addChildEventListener(new ChildEventListener() {
+        IDref.addChildEventListener(new ChildEventListener() { //TODO: move to appropriate class
             /**
              * add the new item present in the database to the ArrayList
              * @param dataSnapshot
@@ -73,6 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ((MainActivityPresenter)mainPresenter).getItems().add(new TODOitem(dataSnapshot.getKey()));
+                Log.i("hello", dataSnapshot.getKey());
                 ((MainActivityPresenter)mainPresenter).notifyAdapter();
             }
 

@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class MainActivityPresenter implements MainPresenter {
 
-    private ArrayList<TODOitem> items=new ArrayList<TODOitem>();
+    private ArrayList<TODOitem> items = new ArrayList<TODOitem>();
     private ArrayAdapter<TODOitem> adapter;
 
     private MainView mainView;
@@ -22,24 +22,26 @@ public class MainActivityPresenter implements MainPresenter {
     private Context ctx;
     // private MainInteractor mainInteractor;
 
-    public MainActivityPresenter(MainView view, Context ctx){
-        mainView=view;
-        this.ctx=ctx;
+    public MainActivityPresenter(MainView view, Context ctx) {
+        mainView = view;
+        this.ctx = ctx;
         adapter = new ArrayAdapter<TODOitem>(ctx, android.R.layout.simple_list_item_1, items);
-        network=new Network(mainView, this);
+        network = new Network(this);
     }
 
     @Override
     public void onAddBtnClicked() {
-        String itemEntered = ((MainActivity)mainView).getItemET();
-        ((MainActivity)mainView).setItemET("");
-        network.getIDref().child(itemEntered).setValue("");
+        String itemEntered = ((MainActivity) mainView).getItemET();
+        ((MainActivity) mainView).setItemET("");
+        TODOitem newItem = new TODOitem(itemEntered);
+        network.addItem(newItem);
 
     }
 
     @Override
     public void onItemClicked(int position) {
-        TODOitem removedItem=items.get(position); //get the position of the item the user wishes to remove
+        TODOitem removedItem = items.get(position); //get the position of the item the user wishes to remove
+        //TODO: Move to the network, just call remove
         network.getIDref().child(removedItem.title).removeValue(); //remove value from database
         items.remove(position);
         notifyAdapter();
@@ -48,6 +50,7 @@ public class MainActivityPresenter implements MainPresenter {
 
     @Override
     public void onLogoutBtnClicked() {
+        //TODO: Handle in the network
         FirebaseAuth.getInstance().signOut();
     }
 
@@ -55,7 +58,7 @@ public class MainActivityPresenter implements MainPresenter {
         return items;
     }
 
-    public void notifyAdapter(){
+    public void notifyAdapter() {
         adapter.notifyDataSetChanged();
     }
 
@@ -63,7 +66,7 @@ public class MainActivityPresenter implements MainPresenter {
         return adapter;
     }
 
-    public void removeItem(TODOitem item){
+    public void removeItem(TODOitem item) {
         items.remove(item);
     }
 }

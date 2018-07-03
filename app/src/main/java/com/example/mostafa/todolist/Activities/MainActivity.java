@@ -34,17 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button add_btn;
     private Button logout_btn;
     private ListView itemsList;
-
-
-
-    private DatabaseReference dref= FirebaseDatabase.getInstance().getReference(); //root node
-    //TODO: move to Interaction
-
     private MainPresenter mainPresenter;
-  //  private M
-
-    private DatabaseReference usersRef = dref.child("users"); //child from the root node: users
-    private DatabaseReference IDref = usersRef.child(FirebaseAuth.getInstance().getCurrentUser().getUid()); //child from the users node: depending on the id of the user
 
 
     /**
@@ -65,51 +55,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         mainPresenter=new MainActivityPresenter(this, getApplicationContext());
 
-        IDref.addChildEventListener(new ChildEventListener() { //TODO: move to appropriate class
-            /**
-             * add the new item present in the database to the ArrayList
-             * @param dataSnapshot
-             * @param s
-             */
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                ((MainActivityPresenter)mainPresenter).getItems().add(new TODOitem(dataSnapshot.getKey()));
-                Log.i("hello", dataSnapshot.getKey());
-                ((MainActivityPresenter)mainPresenter).notifyAdapter();
-            }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            /**
-             * remove the item that was deleted from the database, from the ArrayList
-             * @param dataSnapshot
-             */
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                for(TODOitem item: ((MainActivityPresenter)mainPresenter).getItems()){
-                    if (item.title.equals((dataSnapshot.getKey())))
-                        ((MainActivityPresenter)mainPresenter).getItems().remove(dataSnapshot.getKey());
-                }
-                ((MainActivityPresenter)mainPresenter).notifyAdapter();
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-
-        });
 
         itemsList.setAdapter(((MainActivityPresenter)mainPresenter).getAdapter());
-        getApplicationContext();
         add_btn.setOnClickListener(this);
         logout_btn.setOnClickListener(this);
         itemsList.setOnItemClickListener(this);
@@ -129,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
 
             case R.id.logout_btn: //logs out the user and finished the activity
-                FirebaseAuth.getInstance().signOut();
+                mainPresenter.onLogoutBtnClicked();
                 finish();
                 break;
         }
@@ -162,11 +110,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void setItemET(String text){
         itemET.setText(text);
     }
-
-    public DatabaseReference getIDref() {
-        return IDref;
-    }
-
 
 }
 

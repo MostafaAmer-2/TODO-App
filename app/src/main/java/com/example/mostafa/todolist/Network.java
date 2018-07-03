@@ -37,10 +37,8 @@ public class Network {
              */
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                TODOitem item = TODOitem.convertToItem(dataSnapshot);
-                //TODO: The next two lines should be handled in the presenter
-                ((MainActivityPresenter) mainPresenter).getItems().add(item);
-                ((MainActivityPresenter) mainPresenter).notifyAdapter();
+                TODOitem itemToBeAdded = TODOitem.convertToItem(dataSnapshot);
+                ((MainActivityPresenter) mainPresenter).addItem(itemToBeAdded);
             }
 
             @Override
@@ -54,13 +52,7 @@ public class Network {
              */
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                //TODO: The next couple of lines should be handled in the presenter
-                for (TODOitem item : ((MainActivityPresenter) mainPresenter).getItems()) {
-                    if (item.title.equals((dataSnapshot.getKey()))) {
-                        ((MainActivityPresenter) mainPresenter).removeItem(item);
-                    }
-                }
-                ((MainActivityPresenter) mainPresenter).notifyAdapter();
+                ((MainActivityPresenter) mainPresenter).removeItem(TODOitem.convertToItem(dataSnapshot));
             }
 
             @Override
@@ -75,13 +67,15 @@ public class Network {
         });
     }
 
-    //TODO: Remove redundant method
-    public DatabaseReference getIDref() {
-        return IDref;
+    public void addItem(TODOitem newItem) {
+        IDref.child(newItem.title).setValue("");
     }
 
-    public void addItem(TODOitem newItem) {
-        getIDref().child(newItem.title).setValue("");
+    public void remove(TODOitem itemToBeRemoved) {
+        IDref.child(itemToBeRemoved.title).removeValue();
+    }
 
+    public void signOut() {
+        FirebaseAuth.getInstance().signOut();
     }
 }

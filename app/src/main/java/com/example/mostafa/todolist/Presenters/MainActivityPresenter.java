@@ -1,6 +1,7 @@
 package com.example.mostafa.todolist.Presenters;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 
 import com.example.mostafa.todolist.Activities.MainActivity;
@@ -20,7 +21,6 @@ public class MainActivityPresenter implements MainPresenter {
     private MainView mainView;
     private Network network;
     private Context ctx;
-    // private MainInteractor mainInteractor;
 
     public MainActivityPresenter(MainView view, Context ctx) {
         mainView = view;
@@ -40,18 +40,16 @@ public class MainActivityPresenter implements MainPresenter {
 
     @Override
     public void onItemClicked(int position) {
-        TODOitem removedItem = items.get(position); //get the position of the item the user wishes to remove
-        //TODO: Move to the network, just call remove
-        network.getIDref().child(removedItem.title).removeValue(); //remove value from database
-        items.remove(position);
+        TODOitem itemToBeRemoved = items.get(position); //get the position of the item the user wishes to remove
+        network.remove(itemToBeRemoved);//remove value from database
+        items.remove(position); //remove value from the item list
         notifyAdapter();
 
     }
 
     @Override
     public void onLogoutBtnClicked() {
-        //TODO: Handle in the network
-        FirebaseAuth.getInstance().signOut();
+        network.signOut();
     }
 
     public ArrayList<TODOitem> getItems() {
@@ -67,6 +65,17 @@ public class MainActivityPresenter implements MainPresenter {
     }
 
     public void removeItem(TODOitem item) {
-        items.remove(item);
+        for (int i=0;i<items.size();i++) {
+           if(items.get(i).title.equals(item.title))
+               items.remove(i);
+
+        }
+        notifyAdapter();
     }
+
+    public void addItem(TODOitem item) {
+        items.add(item);
+        notifyAdapter();
+    }
+
 }

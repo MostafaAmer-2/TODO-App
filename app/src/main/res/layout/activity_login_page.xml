@@ -1,53 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-tools:context=".Activities.login_page">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorAccent">
 
-<EditText
-    android:id="@+id/emailField"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:ems="10"
-    android:hint="Email"
-    android:inputType="textEmailAddress"
-    app:layout_constraintBottom_toBottomOf="parent"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:src="@drawable/logo_batman" />
 
-<EditText
-    android:id="@+id/passwordField"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="1dp"
-    android:layout_marginStart="1dp"
-    android:layout_marginTop="14dp"
-    android:ems="10"
-    android:hint="Password"
-    android:inputType="textPassword"
-    app:layout_constraintStart_toStartOf="@+id/emailField"
-    app:layout_constraintTop_toBottomOf="@+id/emailField" />
+    <EditText
+        android:id="@+id/emailField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:ems="10"
+        android:hint="Email"
+        android:inputType="textEmailAddress"
+        android:textColor="@color/white"
+        android:textColorHint="@color/white" />
+
+    <EditText
+        android:id="@+id/passwordField"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/emailField"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/login_component_margin_top"
+        android:ems="10"
+        android:hint="Password"
+        android:inputType="textPassword"
+        android:textColor="@color/white"
+
+        android:textColorHint="@color/white" />
 
     <Button
         android:id="@+id/loginBtn"
+        style="@style/LoginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:text="Login"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
+        android:layout_below="@id/passwordField"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/login_component_margin_top"
+        android:text="Login" />
 
     <Button
         android:id="@+id/registerBtn"
+        style="@style/LoginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="88dp"
-        android:text="Register"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordField" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_below="@id/loginBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/login_component_margin_top"
+        android:text="Register" />
+</RelativeLayout>

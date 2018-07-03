@@ -15,4 +15,5 @@
         completions."
     </string>
     <string name="title_activity_login_page">login_page</string>
+    <string name="enter_item">Enter Item</string>
 </resources>

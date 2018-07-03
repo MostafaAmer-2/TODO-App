@@ -14,16 +14,21 @@ import com.example.mostafa.todolist.Interfaces.MainView;
 import com.example.mostafa.todolist.Presenters.MainActivityPresenter;
 import com.example.mostafa.todolist.R;
 
+import butterknife.BindView;
+
 /**
  * This class is responsible for showing and editing the todoList
  */
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, MainView {
 
-    //TODO: Use butterknife for binding
-    private EditText itemET;
-    private Button add_btn;
-    private Button logout_btn;
-    private ListView itemsList;
+    @BindView(R.id.item_edit_text)
+    EditText itemET;
+    @BindView(R.id.add_btn)
+    Button add_btn;
+    @BindView(R.id.logout_btn)
+    Button logout_btn;
+    @BindView(R.id.items_list)
+    ListView itemsList;
     private MainPresenter mainPresenter;
 
 

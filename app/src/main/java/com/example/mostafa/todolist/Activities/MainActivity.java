@@ -16,6 +16,7 @@ import com.example.mostafa.todolist.Presenters.MainActivityPresenter;
 import com.example.mostafa.todolist.R;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * This class is responsible for showing and editing the todoList
@@ -44,11 +45,7 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        itemET = findViewById(R.id.item_edit_text);
-        add_btn = findViewById(R.id.add_btn);
-        logout_btn = findViewById(R.id.logout_btn);
-        itemsList = findViewById(R.id.items_list);
+        ButterKnife.bind(this);
 
         mainPresenter = new MainActivityPresenter(this, getApplicationContext());
 

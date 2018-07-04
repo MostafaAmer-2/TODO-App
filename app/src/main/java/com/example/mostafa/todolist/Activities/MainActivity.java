@@ -1,5 +1,6 @@
 package com.example.mostafa.todolist.Activities;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -19,7 +20,7 @@ import butterknife.BindView;
 /**
  * This class is responsible for showing and editing the todoList
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, MainView {
+public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener, MainView {
 
     @BindView(R.id.item_edit_text)
     EditText itemET;

@@ -1,5 +1,7 @@
 package com.example.mostafa.todolist.Activities;
 
+import android.app.Activity;
+import android.app.Application;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +20,7 @@ import com.google.firebase.auth.FirebaseAuth;
 /**
  * This class is responsible for collecting credentials from the user required for sign up
  */
-public class register_page extends AppCompatActivity {
+public class register_page extends Activity {
 
     private EditText mEmailField;
     private EditText mPasswordField;

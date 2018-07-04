@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuth;
  */
 public class login_page extends Activity {
 
-
+    String TAG = "login_page";
     private EditText emailField;
     private EditText passwordField;
     private Button loginBtn;
@@ -48,7 +49,14 @@ public class login_page extends Activity {
         passwordField= (EditText) findViewById(R.id.passwordField);
         loginBtn= (Button) findViewById(R.id.loginBtn);
         registerBtn= (Button) findViewById(R.id.registerBtn);
-
+        Bundle extras = getIntent().getExtras();
+        if (extras!=null) {
+            String email = extras.getString("email");
+            String password = extras.getString("password");
+            Log.i(TAG, "onCreate: "+email);
+            emailField.setText(email);
+            passwordField.setText(password);
+        }
         mAuthListener=new FirebaseAuth.AuthStateListener() {
             /**
              * the purpose of this method is to detect the change in state of the authentication, whether the user
@@ -58,7 +66,8 @@ public class login_page extends Activity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){ //if there exists a user who is signed in right now
-                    startActivity(new Intent(login_page.this, MainActivity.class));
+                    Intent go_to_main = new Intent(login_page.this, MainActivity.class);
+                    startActivity(go_to_main);
                 }
             }
         };
@@ -86,6 +95,7 @@ public class login_page extends Activity {
             }
         });
 
+
     }
 
     /**
@@ -94,8 +104,8 @@ public class login_page extends Activity {
     protected void onStart(){
         super.onStart();
 
-        emailField.setText("");
-        passwordField.setText("");
+//        emailField.setText("");
+//        passwordField.setText("");
 
         mAuth.addAuthStateListener(mAuthListener);
     }

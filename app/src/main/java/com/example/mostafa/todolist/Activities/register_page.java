@@ -2,6 +2,7 @@ package com.example.mostafa.todolist.Activities;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -73,8 +74,8 @@ public class register_page extends Activity {
      * after checking that they meet the preliminary checks. In case of any error, a toast is shown to the user.
      */
     private void startRegistration(){
-        String email= mEmailField.getText().toString();
-        String password=mPasswordField.getText().toString();
+        final String email= mEmailField.getText().toString();
+        final String password=mPasswordField.getText().toString();
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) { //checking that the fields are not left empty
             Toast.makeText(register_page.this, "Empty Fields", Toast.LENGTH_LONG).show();
@@ -99,7 +100,11 @@ public class register_page extends Activity {
                     }
                     else {
                         FirebaseAuth.getInstance().signOut();
-                        finish();
+                        Intent goToLogin = new Intent(register_page.this, login_page.class);
+                        goToLogin.putExtra("email", email);
+                        goToLogin.putExtra("password", password);
+                        startActivity(goToLogin);
+
                     }
                 }
             });

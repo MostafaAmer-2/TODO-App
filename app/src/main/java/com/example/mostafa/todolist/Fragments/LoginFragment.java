@@ -1,17 +1,21 @@
-package com.example.mostafa.todolist.Activities;
+package com.example.mostafa.todolist.Fragments;
 
-import android.app.Activity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.mostafa.todolist.Activities.Frags;
+import com.example.mostafa.todolist.Activities.MainActivity;
 import com.example.mostafa.todolist.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -19,9 +23,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 /**
- * This class is responsible for collecting credentials from the user and starting the sign in process.
+ * A simple {@link Fragment} subclass.
  */
-public class login_page extends AppCompatActivity {
+public class LoginFragment extends Fragment {
 
     String TAG = "login_page";
     private EditText emailField;
@@ -32,24 +36,19 @@ public class login_page extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
+    public LoginFragment() {
+        // Required empty public constructor
+        super();
+    }
 
-    /**
-     * The onCreate method instantiates all the instance variables with their corresponding values,
-     * setting the action listeners for the buttons and setting the Authentication Listener.
-     * @param savedInstanceState
-     */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_page);
+        // setContentView(R.layout.activity_login_page);
 
         mAuth=FirebaseAuth.getInstance();
 
-        emailField= (EditText) findViewById(R.id.emailField);
-        passwordField= (EditText) findViewById(R.id.passwordField);
-        loginBtn= (Button) findViewById(R.id.loginBtn);
-        registerBtn= (Button) findViewById(R.id.registerBtn);
-        Bundle extras = getIntent().getExtras();
+        Bundle extras = getActivity().getIntent().getExtras();
         if (extras!=null) {
             String email = extras.getString("email");
             String password = extras.getString("password");
@@ -66,11 +65,29 @@ public class login_page extends AppCompatActivity {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser() != null){ //if there exists a user who is signed in right now
-                    Intent go_to_main = new Intent(login_page.this, MainActivity.class);
+                    Intent go_to_main = new Intent(getActivity(), MainActivity.class);
                     startActivity(go_to_main);
                 }
             }
         };
+
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_login, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        emailField= (EditText) view.findViewById(R.id.emailField);
+        passwordField= (EditText) view.findViewById(R.id.passwordField);
+        loginBtn= (Button) view.findViewById(R.id.loginBtn);
+        registerBtn= (Button) view.findViewById(R.id.registerBtn);
 
         loginBtn.setOnClickListener(new View.OnClickListener(){
 
@@ -83,30 +100,10 @@ public class login_page extends AppCompatActivity {
                 startSignIn();
             }
         });
-        registerBtn.setOnClickListener(new View.OnClickListener(){
-
-            /**
-             * Calling the goToRegistration method once the register button gets clicked
-             * @param view the view containing the button
-             */
-            @Override
-            public void onClick(View view) {
-                goToRegistrationPage();
-            }
-        });
-
-
     }
 
-    /**
-     * set the EditText fields of email and password to empty as the activity starts, and set the Auth State Listener
-     */
-    protected void onStart(){
+    public void onStart(){
         super.onStart();
-
-//        emailField.setText("");
-//        passwordField.setText("");
-
         mAuth.addAuthStateListener(mAuthListener);
     }
 
@@ -130,7 +127,7 @@ public class login_page extends AppCompatActivity {
         String password=passwordField.getText().toString();
 
         if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){ //conndition to ensure the fields are not left empty
-            Toast.makeText(login_page.this, "Empty Fields", Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), "Empty Fields", Toast.LENGTH_LONG).show();
         }
         else{
             mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -142,19 +139,10 @@ public class login_page extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if(!task.isSuccessful()){ //sign in failed
-                        Toast.makeText(login_page.this, "Sign In Problem", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Sign In Problem", Toast.LENGTH_LONG).show();
                     }
                 }
             });
         }
     }
-
-    /**
-     *This method starts a new activity responsible for the registration
-     */
-    private void goToRegistrationPage(){
-        startActivity(new Intent(login_page.this, Frags.class));
-    }
-
 }
-

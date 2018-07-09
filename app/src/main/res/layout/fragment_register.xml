@@ -38,7 +38,7 @@
         android:textColorHint="#38AECC" />
 
     <Button
-        android:id="@+id/loginBtn"
+        android:id="@+id/registerBtn"
         style="@style/LoginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -3,6 +3,9 @@ package com.example.mostafa.todolist.Activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -21,17 +24,22 @@ import butterknife.ButterKnife;
 /**
  * This class is responsible for showing and editing the todoList
  */
-public class MainActivity extends Activity implements View.OnClickListener, AdapterView.OnItemClickListener, MainView {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener, MainView {
 
     @BindView(R.id.item_edit_text)
     EditText itemET;
     @BindView(R.id.add_btn)
     Button add_btn;
-    @BindView(R.id.logout_btn)
-    Button logout_btn;
+//    @BindView(R.id.logout_btn)
+//    Button logout_btn;
     @BindView(R.id.items_list)
     ListView itemsList;
+
     private MainPresenter mainPresenter;
+
+    @BindView(R.id.my_toolbar)
+    Toolbar mTopToolbar;
+
 
 
     /**
@@ -46,14 +54,16 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        setSupportActionBar(mTopToolbar);
 
         mainPresenter = new MainActivityPresenter(this, getApplicationContext());
 
 
         itemsList.setAdapter(((MainActivityPresenter) mainPresenter).getAdapter());
         add_btn.setOnClickListener(this);
-        logout_btn.setOnClickListener(this);
+    //    logout_btn.setOnClickListener(this);
         itemsList.setOnItemClickListener(this);
+
 
     }
 
@@ -70,10 +80,10 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
                 displayItemAdded();
                 break;
 
-            case R.id.logout_btn: //logs out the user and finished the activity
-                mainPresenter.onLogoutBtnClicked();
-                finish();
-                break;
+      //      case R.id.logout_btn: //logs out the user and finished the activity
+      //          mainPresenter.onLogoutBtnClicked();
+      //          finish();
+      //          break;
         }
     }
 
@@ -107,6 +117,42 @@ public class MainActivity extends Activity implements View.OnClickListener, Adap
         itemET.setText(text);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_logout) {
+            mainPresenter.onLogoutBtnClicked();
+            finish();
+        }
+
+        else if (id == R.id.action_help) {
+            Toast.makeText(MainActivity.this, "Tap on an item to delete it", Toast.LENGTH_LONG).show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        mainPresenter.onLogoutBtnClicked();
+        finish();
+    }
 }
+
+
 
 

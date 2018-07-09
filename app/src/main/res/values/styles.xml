@@ -6,6 +6,8 @@
         <item name="colorPrimary">#38AECC</item>
         <item name="colorPrimaryDark">#006E90</item>
         <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
     </style>
 
     <style name="LoginButton">

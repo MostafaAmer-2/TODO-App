@@ -22,16 +22,21 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class LoginFragment extends Fragment {
 
     String TAG = "login_page";
-    private EditText emailField;
-    private EditText passwordField;
-    private Button loginBtn;
-    private Button registerBtn;
+    @BindView(R.id.emailField)
+    EditText emailField;
+    @BindView(R.id.passwordField)
+    EditText passwordField;
+    @BindView(R.id.loginBtn)
+    Button loginBtn;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -42,21 +47,22 @@ public class LoginFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // setContentView(R.layout.activity_login_page);
-
-        mAuth=FirebaseAuth.getInstance();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_login, container, false);
+        ButterKnife.bind(this, view);
+        mAuth = FirebaseAuth.getInstance();
 
         Bundle extras = getActivity().getIntent().getExtras();
-        if (extras!=null) {
+        if (extras != null) {
             String email = extras.getString("email");
             String password = extras.getString("password");
-            Log.i(TAG, "onCreate: "+email);
+            Log.i(TAG, "onCreate: " + email);
             emailField.setText(email);
             passwordField.setText(password);
         }
-        mAuthListener=new FirebaseAuth.AuthStateListener() {
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
             /**
              * the purpose of this method is to detect the change in state of the authentication, whether the user
              * gets signed in, signed out, ..etc
@@ -64,32 +70,23 @@ public class LoginFragment extends Fragment {
              */
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null){ //if there exists a user who is signed in right now
-                    Intent go_to_main = new Intent(getActivity(), MainActivity.class);
-                    startActivity(go_to_main);
+                if (firebaseAuth.getCurrentUser() != null) { //if there exists a user who is signed in right now
+                   goToMain();
                 }
             }
         };
-
-
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false);
+    private void goToMain(){
+        Intent go_to_main = new Intent(getActivity(), MainActivity.class);
+        startActivity(go_to_main);
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        emailField= (EditText) view.findViewById(R.id.emailField);
-        passwordField= (EditText) view.findViewById(R.id.passwordField);
-        loginBtn= (Button) view.findViewById(R.id.loginBtn);
-        registerBtn= (Button) view.findViewById(R.id.registerBtn);
-
-        loginBtn.setOnClickListener(new View.OnClickListener(){
+        loginBtn.setOnClickListener(new View.OnClickListener() {
 
             /**
              * Calling the startSignIn method once the login button gets clicked
@@ -102,7 +99,7 @@ public class LoginFragment extends Fragment {
         });
     }
 
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
     }
@@ -110,7 +107,7 @@ public class LoginFragment extends Fragment {
     /**
      * Make sure the user gets signed out, as the activity stops
      */
-    public void onStop(){
+    public void onStop() {
         super.onStop();
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
@@ -122,15 +119,14 @@ public class LoginFragment extends Fragment {
      * startSignIn method collects the email and password of the user and tries to sign them in
      * after checking that they meet the preliminary checks. In case of any error, a toast is shown to the user.
      */
-    private void startSignIn(){
-        String email= emailField.getText().toString();
-        String password=passwordField.getText().toString();
+    private void startSignIn() {
+        String email = emailField.getText().toString();
+        String password = passwordField.getText().toString();
 
-        if(TextUtils.isEmpty(email) || TextUtils.isEmpty(password)){ //conndition to ensure the fields are not left empty
+        if (TextUtils.isEmpty(email) || TextUtils.isEmpty(password)) { //conndition to ensure the fields are not left empty
             Toast.makeText(getActivity(), "Empty Fields", Toast.LENGTH_LONG).show();
-        }
-        else{
-            mAuth.signInWithEmailAndPassword(email,password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        } else {
+            mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 /**
                  * the onComplete method is used to show the status of the task it's invoked on,
                  * whether it's successful or not.
@@ -138,7 +134,7 @@ public class LoginFragment extends Fragment {
                  */
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
-                    if(!task.isSuccessful()){ //sign in failed
+                    if (!task.isSuccessful()) { //sign in failed
                         Toast.makeText(getActivity(), "Sign In Problem", Toast.LENGTH_LONG).show();
                     }
                 }

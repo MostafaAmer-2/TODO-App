@@ -18,5 +18,7 @@
     <string name="enter_item">Enter Item</string>
     <string name="choose_email">Choose E-mail</string>
     <string name="choose_password">Choose Password</string>
+    <string name="logout">Logout</string>
+    <string name="help">help</string>
 
 </resources>

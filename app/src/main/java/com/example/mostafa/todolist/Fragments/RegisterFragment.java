@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,14 +24,20 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class RegisterFragment extends Fragment {
-
-    private EditText mEmailField;
-    private EditText mPasswordField;
-    private Button mRegisterBtn;
+    String TAG = "RegisterFragment";
+    @BindView(R.id.emailField)
+    EditText mEmailField;
+    @BindView(R.id.passwordField)
+     EditText mPasswordField;
+    @BindView(R.id.registerBtn)
+     Button mRegisterBtn;
 
     private FirebaseAuth mAuth;
 
@@ -46,30 +53,27 @@ public class RegisterFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_register, container, false);
+        View view= inflater.inflate(R.layout.fragment_register, container, false);
+        ButterKnife.bind(this, view);
+        //TODO: Unable to add the button action listener until now. The app crashes when I add it
+        mRegisterBtn.setOnClickListener(new View.OnClickListener(){
+
+            /**
+             *starting the registration process once the "register" button gets clicked
+             * @param view
+             */
+            @Override
+            public void onClick(View view) {
+                startRegistration();
+            }
+        });
+        return view;
     }
 
 
     @Override
     public void onViewCreated( View view,  Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
-        mEmailField= (EditText) view.findViewById(R.id.emailField);
-        mPasswordField= (EditText) view.findViewById(R.id.passwordField);
-        mRegisterBtn= (Button) view.findViewById(R.id.registerBtn);
-
-        //TODO: Unable to add the button action listener until now. The app crashes when I add it
-//        mRegisterBtn.setOnClickListener(new View.OnClickListener(){
-//
-//            /**
-//             *starting the registration process once the "register" button gets clicked
-//             * @param view
-//             */
-//            @Override
-//            public void onClick(View view) {
-//                startRegistration();
-//            }
-//        });
     }
 
     @Override
@@ -79,6 +83,7 @@ public class RegisterFragment extends Fragment {
     }
 
     private void startRegistration(){
+        Log.i(TAG, "startRegistration: "+"HEREEEEE!!");
         final String email= mEmailField.getText().toString();
         final String password=mPasswordField.getText().toString();
 

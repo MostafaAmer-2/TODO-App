@@ -3,6 +3,7 @@ package com.example.mostafa.todolist.Activities;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -32,13 +33,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     Button add_btn;
 //    @BindView(R.id.logout_btn)
 //    Button logout_btn;
-    @BindView(R.id.items_list)
-    ListView itemsList;
+//    @BindView(R.id.items_list)
+//    ListView itemsList;
 
     private MainPresenter mainPresenter;
 
     @BindView(R.id.my_toolbar)
     Toolbar mTopToolbar;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
 
 
@@ -59,10 +63,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mainPresenter = new MainActivityPresenter(this, getApplicationContext());
 
 
-        itemsList.setAdapter(((MainActivityPresenter) mainPresenter).getAdapter());
+    //    itemsList.setAdapter(((MainActivityPresenter) mainPresenter).getAdapter());
         add_btn.setOnClickListener(this);
     //    logout_btn.setOnClickListener(this);
-        itemsList.setOnItemClickListener(this);
+    //    itemsList.setOnItemClickListener(this);
 
 
     }
@@ -86,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
       //          break;
         }
     }
+
+
 
     public void displayItemAdded() {
         Toast.makeText(this, "Item Added", Toast.LENGTH_SHORT).show();
@@ -150,6 +156,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onBackPressed();
         mainPresenter.onLogoutBtnClicked();
         finish();
+    }
+
+    public RecyclerView getRecyclerView() {
+        return recyclerView;
     }
 }
 

@@ -10,8 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.mostafa.todolist.Activities.Frags;
@@ -37,6 +40,8 @@ public class LoginFragment extends Fragment {
     EditText passwordField;
     @BindView(R.id.loginBtn)
     Button loginBtn;
+    @BindView(R.id.imageView)
+    ImageView imageView;
 
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;

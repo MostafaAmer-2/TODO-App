@@ -15,18 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.login_page"
-            android:label="TODO Application">
-
-        </activity>
-        <activity
             android:name=".Activities.MainActivity"
             android:label="My TODO List"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Activities.register_page"
-            android:label="Register" />
-        <activity android:name=".Activities.Frags"
+            android:name=".Activities.Frags"
             android:label="TODO Application">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

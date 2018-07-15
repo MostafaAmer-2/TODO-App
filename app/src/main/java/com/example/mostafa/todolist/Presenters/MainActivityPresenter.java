@@ -1,6 +1,7 @@
 package com.example.mostafa.todolist.Presenters;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
@@ -10,6 +11,7 @@ import com.example.mostafa.todolist.Interfaces.MainView;
 import com.example.mostafa.todolist.Models.TODOitem;
 import com.example.mostafa.todolist.Network;
 import com.example.mostafa.todolist.R;
+import com.example.mostafa.todolist.RecyclerViewAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -17,7 +19,7 @@ import java.util.ArrayList;
 public class MainActivityPresenter implements MainPresenter {
 
     private ArrayList<TODOitem> items = new ArrayList<TODOitem>();
-    private ArrayAdapter<TODOitem> adapter;
+    private RecyclerViewAdapter adapter;
 
     private MainView mainView;
     private Network network;
@@ -26,8 +28,12 @@ public class MainActivityPresenter implements MainPresenter {
     public MainActivityPresenter(MainView view, Context ctx) {
         mainView = view;
         this.ctx = ctx;
-        adapter = new ArrayAdapter<TODOitem>(ctx, R.layout.custom_list_item, items);
+      //  adapter = new ArrayAdapter<TODOitem>(ctx, R.layout.custom_list_item, items);
         network = new Network(this);
+
+        adapter=new RecyclerViewAdapter(this, items, ctx);
+        ((MainActivity) view).getRecyclerView().setAdapter(adapter);
+        ((MainActivity) view).getRecyclerView().setLayoutManager(new LinearLayoutManager(ctx));
     }
 
     @Override
@@ -61,7 +67,7 @@ public class MainActivityPresenter implements MainPresenter {
         adapter.notifyDataSetChanged();
     }
 
-    public ArrayAdapter<TODOitem> getAdapter() {
+    public RecyclerViewAdapter getAdapter() {
         return adapter;
     }
 
